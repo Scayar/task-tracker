@@ -1,7 +1,7 @@
 Task Tracker CLI - Implementation Explanation
 ============================================
 
-Project URL: https://github.com/Scayar/task-tracker
+Project Page URL: https://roadmap.sh/projects/task-tracker
 Repository: https://github.com/Scayar/task-tracker
 
 This document explains exactly how the Task Tracker CLI application was programmed.
