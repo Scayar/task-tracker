@@ -1,6 +1,8 @@
 Task Tracker CLI - Implementation Explanation
 ============================================
 
+Project URL: https://github.com/ROCMondriaanTIN/task-tracker
+
 This document explains exactly how the Task Tracker CLI application was programmed.
 Language: Go. No external libraries - only Go standard library (os, fmt, strconv, encoding/json, time).
 
