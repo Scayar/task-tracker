@@ -1,6 +1,9 @@
 # Task Tracker CLI
 
-Project URL: https://github.com/Scayar/task-tracker
+https://github.com/Scayar/task-tracker
+
+**Project URL:** https://github.com/Scayar/task-tracker  
+**Repository:** https://github.com/Scayar/task-tracker
 
 CLI tool to track and manage tasks. Built with Go (standard library only).
 
