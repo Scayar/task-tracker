@@ -6,17 +6,13 @@ import (
 	"os"
 )
 
-const dataFile = "tasks.json"
-
 func loadTasks() []Task {
-	data, err := os.ReadFile(dataFile)
+	data, err := os.ReadFile("tasks.json")
 	if err != nil {
 		return []Task{}
 	}
-
 	var tasks []Task
-	if err := json.Unmarshal(data, &tasks); err != nil {
-		fmt.Println("Warning: could not parse tasks.json, starting fresh")
+	if json.Unmarshal(data, &tasks) != nil {
 		return []Task{}
 	}
 	return tasks
@@ -25,11 +21,11 @@ func loadTasks() []Task {
 func saveTasks(tasks []Task) bool {
 	data, err := json.MarshalIndent(tasks, "", "  ")
 	if err != nil {
-		fmt.Println("Error: failed to encode tasks -", err)
+		fmt.Println(err)
 		return false
 	}
-	if err := os.WriteFile(dataFile, data, 0644); err != nil {
-		fmt.Println("Error: could not write tasks.json -", err)
+	if os.WriteFile("tasks.json", data, 0644) != nil {
+		fmt.Println("can't write tasks.json")
 		return false
 	}
 	return true

@@ -1,100 +1,34 @@
-Task Tracker CLI - Implementation Explanation
-============================================
+task tracker cli
+===============
 
-Project URL: https://github.com/ROCMondriaanTIN/task-tracker
-
-This document explains exactly how the Task Tracker CLI application was programmed.
-Language: Go. No external libraries - only Go standard library (os, fmt, strconv, encoding/json, time).
-
-
-HOW TO RUN
-----------
+runnen:
   go run .
-  go build -o task-cli.exe .
+  go build -o task-cli.exe
+
+gebruik:
+  add "tekst"
+  update <id> "tekst"
+  delete <id>
+  mark-in-progress <id>
+  mark-done <id>
+  list
+  list done / list todo / list in-progress
 
 
-COMMANDS (positional arguments as required)
--------------------------------------------
-  task-cli add "description"
-  task-cli update <id> "description"
-  task-cli delete <id>
-  task-cli mark-in-progress <id>
-  task-cli mark-done <id>
-  task-cli list
-  task-cli list done
-  task-cli list todo
-  task-cli list in-progress
+hoe ik het gemaakt heb
+----------------------
 
+Gewoon Go met standard library, niks extras.
 
-PROJECT STRUCTURE
------------------
-  main.go    - CLI entry point, parses os.Args and dispatches to task functions
-  task.go    - Task struct, all task operations (add, update, delete, mark, list)
-  storage.go - JSON file read/write using native os and encoding/json
-  tasks.json - Created automatically in current directory when first task is added
-  go.mod     - Go module (no external dependencies)
+main.go - hier kijk ik naar os.Args. eerste arg = command, rest zijn parameters. 
+check of er genoeg args zijn anders error. id's moet ik van string naar int dus 
+strconv.Atoi. als dat faalt is het geen goed id. usage() laat alle commands zien.
 
+task.go - Task struct met id, description, status, createdAt, updatedAt. elke 
+functie laadt tasks, doet zn ding, slaat op. bij add zoek ik max id + 1. bij 
+update/delete/mark loop ik tot ik de juiste id vind. list filtered op status 
+als je dat meegeeft. [x] done [~] bezig [ ] nog te doen.
 
-HOW IT WAS PROGRAMMED
----------------------
-
-1. main.go - Command Line Interface
-   - Reads user input from os.Args (positional arguments)
-   - First argument = command (add, update, delete, mark-in-progress, mark-done, list)
-   - Validates argument count with requireArgs() before each operation
-   - Uses parseID() to convert string ID to int, exits with error if invalid
-   - For "list", optional second argument = filter (done, todo, in-progress)
-   - Unknown commands or filters print error and show usage
-   - On task-not-found (update/delete/mark), exits with code 1
-
-2. task.go - Task Logic
-   - Task struct: id, description, status, createdAt, updatedAt (all required properties)
-   - nextID(): finds max ID in list + 1 for new tasks
-   - findTask(): returns index by id, -1 if not found
-   - addTask(): creates task with status "todo", timestamps via time.Now()
-   - updateTask(): updates description and updatedAt
-   - deleteTask(): removes task by index with slice append
-   - markTask(): sets status to "in-progress" or "done", updates updatedAt
-   - listTasks(): filters by status when given, shows [x] done, [~] in-progress, [ ] todo
-
-3. storage.go - JSON File (native filesystem)
-   - dataFile constant = "tasks.json" in current directory
-   - loadTasks(): os.ReadFile - if file missing, returns empty slice (file created on first save)
-   - loadTasks(): json.Unmarshal - if parse fails, prints warning and returns empty slice
-   - saveTasks(): json.MarshalIndent for readable JSON, os.WriteFile - creates file if not exists
-   - saveTasks() returns false on error; callers exit with 1 to avoid false success message
-
-
-ERROR HANDLING
---------------
-  - Missing/invalid arguments: print example, exit 1
-  - Invalid task ID (non-numeric): print error, exit 1
-  - Task not found: print error, exit 1
-  - Unknown filter: print error, exit 1
-  - JSON write/encode failure: print error, exit 1
-  - Corrupt tasks.json: warning, start with empty list
-
-
-JSON FILE FORMAT
-----------------
-  [
-    {
-      "id": 1,
-      "description": "Buy groceries",
-      "status": "todo",
-      "createdAt": "2026-03-02 14:00:00",
-      "updatedAt": "2026-03-02 14:00:00"
-    }
-  ]
-
-
-REQUIREMENTS MET
-----------------
-  - Add, Update, Delete tasks
-  - Mark in-progress, mark done
-  - List all / list done / list todo / list in-progress
-  - Positional arguments
-  - JSON file in current directory, created if not exists
-  - Native filesystem (os package)
-  - No external libraries
-  - Error handling and edge cases
+storage.go - loadTasks leest tasks.json, als file niet bestaat of json klopt 
+niet dan lege slice. saveTasks schrijft weer weg met MarshalIndent. bestand 
+wordt vanzelf aangemaakt bij eerste add.
