@@ -1,8 +1,7 @@
 # task tracker cli
 
-https://roadmap.sh/projects/task-tracker
-
-https://github.com/Scayar/task-tracker
+Project page: https://roadmap.sh/projects/task-tracker  
+Repository: https://github.com/Scayar/task-tracker
 
 runnen:
 - go run .
