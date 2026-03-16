@@ -18,17 +18,11 @@ gebruik:
 hoe ik het gemaakt heb
 ----------------------
 
-Gewoon Go met standard library, niks extras.
+Go met standard library. Geen extras.
 
-main.go - hier kijk ik naar os.Args. eerste arg = command, rest zijn parameters. 
-check of er genoeg args zijn anders error. id's moet ik van string naar int dus 
-strconv.Atoi. als dat faalt is het geen goed id. usage() laat alle commands zien.
+main.go - os.Args voor commands. check args, strconv.Atoi voor id's.
 
-task.go - Task struct met id, description, status, createdAt, updatedAt. elke 
-functie laadt tasks, doet zn ding, slaat op. bij add zoek ik max id + 1. bij 
-update/delete/mark loop ik tot ik de juiste id vind. list filtered op status 
-als je dat meegeeft. [x] done [~] bezig [ ] nog te doen.
+task.go - Task struct (id, description, status, timestamps). load, do, save. 
+[x] done [~] bezig [ ] todo.
 
-storage.go - loadTasks leest tasks.json, als file niet bestaat of json klopt 
-niet dan lege slice. saveTasks schrijft weer weg met MarshalIndent. bestand 
-wordt vanzelf aangemaakt bij eerste add.
+storage.go - loadTasks leest json, saveTasks schrijft. file vanzelf bij eerste add.
